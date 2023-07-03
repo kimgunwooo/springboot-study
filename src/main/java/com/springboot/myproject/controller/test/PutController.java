@@ -1,4 +1,4 @@
-package com.springboot.myproject.controller;
+package com.springboot.myproject.controller.test;
 
 import com.springboot.myproject.dto.MemberDto;
 import org.apache.coyote.Response;

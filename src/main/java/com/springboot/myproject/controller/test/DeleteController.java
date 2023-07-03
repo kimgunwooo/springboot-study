@@ -1,4 +1,4 @@
-package com.springboot.myproject.controller;
+package com.springboot.myproject.controller.test;
 
 import org.springframework.web.bind.annotation.*;
 
