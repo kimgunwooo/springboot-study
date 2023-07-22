@@ -187,4 +187,15 @@ public class ProductRepositoryTest {
             System.out.println("-------------------");
         }
     }
+    @Test
+    void findByNameTest(){
+        List<Product> productList = productRepository.findByName("pen");
+
+        for(Product product : productList){
+            System.out.println("Product Number : "+product.getNumber());
+            System.out.println("Product Name : "+product.getName());
+            System.out.println("Product Price : "+product.getPrice());
+            System.out.println("Product Stock : "+product.getStock());
+        }
+    }
 }

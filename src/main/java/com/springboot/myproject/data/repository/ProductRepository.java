@@ -1,6 +1,7 @@
 package com.springboot.myproject.data.repository;
 
 import com.springboot.myproject.data.entity.Product;
+import com.springboot.myproject.data.repository.support.ProductRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -11,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Objects;
 
-public interface ProductRepository extends JpaRepository<Product,Long>{
+public interface ProductRepository extends JpaRepository<Product,Long>, ProductRepositoryCustom {
     // Asc : 오름차순, Desc : 내림차순
     //List<Product> findByNameOrderByNumberAsc(String name);
     List<Product> findByName(String name, Sort sort);
@@ -24,4 +25,6 @@ public interface ProductRepository extends JpaRepository<Product,Long>{
 
     @Query("SELECT p.name, p.price, p.stock FROM Product p WHERE p.name = :name")
     List<Object[]> findByNameParam2(@Param("name") String name);
+
+    
 }
