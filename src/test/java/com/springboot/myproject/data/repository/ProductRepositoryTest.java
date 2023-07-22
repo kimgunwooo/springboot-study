@@ -6,6 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.springboot.myproject.data.entity.Product;
 import com.springboot.myproject.data.entity.QProduct;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,13 +24,17 @@ import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) //실제로 사용하고 있는 데이터베이스로 테스트
+@EnableJpaAuditing
 public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @PersistenceContext
-    EntityManager entityManager;
-
+    @Autowired EntityManager entityManager;
+    JPAQueryFactory jpaQueryFactory;
+    @BeforeEach
+    public void init(){
+        jpaQueryFactory = new JPAQueryFactory(entityManager);
+    }
     @Test
     void save(){
         Product product = new Product();
@@ -38,6 +44,8 @@ public class ProductRepositoryTest {
 
         Product savedProduct = productRepository.save(product);
 
+        System.out.println("productName : "+ savedProduct.getName());
+        System.out.println("createdAt :" + savedProduct.getCreatedAt());
         Assertions.assertEquals(product.getName(),savedProduct.getName());
         Assertions.assertEquals(product.getPrice(),savedProduct.getPrice());
         Assertions.assertEquals(product.getStock(),savedProduct.getStock());
@@ -49,22 +57,16 @@ public class ProductRepositoryTest {
         product1.setName("pen");
         product1.setPrice(1000);
         product1.setStock(100);
-        product1.setCreatedAt(LocalDateTime.now());
-        product1.setUpdatedAt(LocalDateTime.now());
 
         Product product2 = new Product();
         product2.setName("pen");
         product2.setPrice(5000);
         product2.setStock(300);
-        product2.setCreatedAt(LocalDateTime.now());
-        product2.setUpdatedAt(LocalDateTime.now());
 
         Product product3 = new Product();
         product3.setName("pen");
         product3.setPrice(500);
         product3.setStock(50);
-        product3.setCreatedAt(LocalDateTime.now());
-        product3.setUpdatedAt(LocalDateTime.now());
 
         Product savedProduct1 = productRepository.save(product1);
         Product savedProduct2 = productRepository.save(product2);
@@ -114,7 +116,6 @@ public class ProductRepositoryTest {
 
     @Test
     void queryDslTest2(){
-        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
         QProduct qProduct = QProduct.product;
 
         List<Product> productList = jpaQueryFactory
@@ -137,7 +138,6 @@ public class ProductRepositoryTest {
 
     @Test
     void queryDslTest3(){
-        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(entityManager);
         QProduct qProduct = QProduct.product;
 
         List<String> productList = jpaQueryFactory
@@ -168,8 +168,7 @@ public class ProductRepositoryTest {
         }
     }
 
-    @Autowired
-    JPAQueryFactory jpaQueryFactory;
+
 
     @Test
     void queryDslTest4(){

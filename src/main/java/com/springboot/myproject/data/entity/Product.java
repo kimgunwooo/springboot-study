@@ -8,11 +8,11 @@ import java.time.LocalDateTime;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
-@ToString(exclude = "name")
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Entity
 @Table(name = "product")
-public class Product {
+public class Product extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long number;
@@ -26,16 +26,10 @@ public class Product {
     @Column(nullable = false)
     private Integer stock;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
-
     @Builder
-    public Product(String name, Integer price, Integer stock, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Product(String name, Integer price, Integer stock) {
         this.name = name;
         this.price = price;
         this.stock = stock;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 }
