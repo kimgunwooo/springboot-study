@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
@@ -58,10 +60,16 @@ public class ProductRepositoryTest {
         Product savedProduct2 = productRepository.save(product2);
         Product savedProduct3 = productRepository.save(product3);
 
+        //sorting
         productRepository.findByName("pen", Sort.by(Order.asc("price")));
         productRepository.findByName("pen",Sort.by(Order.asc("price"),Order.desc("stock")));
 
         System.out.println(productRepository.findByName("pen",getSort()));
+
+        //Paging
+        Page<Product> productPage = productRepository.findByName("pen", PageRequest.of(0,2));
+        System.out.println(productPage); //몇 번째 페이지에 해당하는지만 확인 가능
+        System.out.println(productPage.getContent()); //세부적인 값 확인
     }
 
     private Sort getSort(){
