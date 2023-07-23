@@ -3,6 +3,8 @@ package com.springboot.myproject.data.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -17,4 +19,8 @@ public class Provider extends BaseEntity{
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy="provider", fetch = FetchType.EAGER) //즉시 로딩 방식
+    @ToString.Exclude
+    private List<Product> productList = new ArrayList<>(); //여러 상품 엔티티가 포함될 수 있기에
 }
