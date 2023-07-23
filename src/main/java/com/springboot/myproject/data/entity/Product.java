@@ -26,6 +26,10 @@ public class Product extends BaseEntity{
     @Column(nullable = false)
     private Integer stock;
 
+    @OneToOne(mappedBy = "product") //양방향 매핑 , mappedBy - ProductDetail 엔티티가 Product 엔티티의 주인이 됨.
+    @ToString.Exclude //순환참조가 발생되어 StackOverflowError 발생 가능하기에 제외
+    private ProductDetail productDetail;
+
     @Builder
     public Product(String name, Integer price, Integer stock) {
         this.name = name;
