@@ -30,6 +30,11 @@ public class Product extends BaseEntity{
     @ToString.Exclude //순환참조가 발생되어 StackOverflowError 발생 가능하기에 제외
     private ProductDetail productDetail;
 
+    @ManyToOne
+    @JoinColumn(name="provider_id")
+    @ToString.Exclude
+    private Provider provider;
+
     @Builder
     public Product(String name, Integer price, Integer stock) {
         this.name = name;
