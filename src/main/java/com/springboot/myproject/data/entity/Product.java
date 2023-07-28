@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -34,6 +36,14 @@ public class Product extends BaseEntity{
     @JoinColumn(name="provider_id")
     @ToString.Exclude
     private Provider provider;
+
+    @ManyToMany
+    @ToString.Exclude
+    private List<Producer> producerList = new ArrayList<>();
+
+    public void addProducer(Producer producer){
+        this.producerList.add(producer);
+    }
 
     @Builder
     public Product(String name, Integer price, Integer stock) {
