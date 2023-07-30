@@ -1,5 +1,7 @@
 package com.springboot.myproject.controller;
 
+import com.springboot.myproject.common.Constants;
+import com.springboot.myproject.common.exception.CustomException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +25,12 @@ public class ExceptionController {
     @GetMapping
     public void getRuntimeException(){
         throw new RuntimeException("getRuntimeException 메서드 호출");
+    }
+
+    @GetMapping("/custom")
+    public void getCustomException() throws CustomException{
+        //도메인 + 어떤 응답코드 사용 + 세부메시지(변경 가능)
+        throw new CustomException(Constants.ExceptionClass.PRODUCT, HttpStatus.BAD_REQUEST, "getCustomException 메서드 호출");
     }
 
     @ExceptionHandler(value = RuntimeException.class)
