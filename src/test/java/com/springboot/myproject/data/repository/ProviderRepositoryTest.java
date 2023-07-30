@@ -2,6 +2,7 @@ package com.springboot.myproject.data.repository;
 
 import com.springboot.myproject.data.entity.Product;
 import com.springboot.myproject.data.entity.Provider;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,5 +78,38 @@ public class ProviderRepositoryTest {
         for(Product product : productList){
             System.out.println(product);
         }
+    }
+
+    //영속성 전이 테스트
+    @Test
+    void cascadeTest(){
+        Provider provider = savedProvider("새로운 공급 업체");
+
+        Product product1 = savedProduct("상품1",1000,1000);
+        Product product2 = savedProduct("상품2",500,1500);
+        Product product3 = savedProduct("상품3",750,500);
+
+        //연관관계 설정
+        product1.setProvider(provider);
+        product2.setProvider(provider);
+        product3.setProvider(provider);
+
+        provider.getProductList().addAll(Lists.newArrayList(product1,product2,product3));
+
+        //부모 엔티티가 되는 Provider 엔티티만 저장하면 Cascade.PERSIST에 맞춰 Product 엔티티도 함께 저장
+        providerRepository.save(provider);
+    }
+    private Provider savedProvider(String name){
+        Provider provider = new Provider();
+        provider.setName(name);
+        return provider;
+    }
+    private Product savedProduct(String name, Integer price, Integer stock){
+        Product product = new Product();
+        product.setName(name);
+        product.setPrice(price);
+        product.setStock(stock);
+
+        return product;
     }
 }
