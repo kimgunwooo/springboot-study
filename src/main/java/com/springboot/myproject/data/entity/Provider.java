@@ -21,7 +21,7 @@ public class Provider extends BaseEntity{
     private String name;
 
     //fetch = FetchType.EAGER 즉시 로딩 방식
-    @OneToMany(mappedBy="provider", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy="provider", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @ToString.Exclude
     private List<Product> productList = new ArrayList<>(); //여러 상품 엔티티가 포함될 수 있기에
 }

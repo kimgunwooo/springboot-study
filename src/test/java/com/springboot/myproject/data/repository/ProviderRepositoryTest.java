@@ -6,6 +6,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -111,5 +112,33 @@ public class ProviderRepositoryTest {
         product.setStock(stock);
 
         return product;
+    }
+
+    //고아 객체의 제거 기능 테스트
+    @Test
+    @Transactional
+    void orphanRemovalTest(){
+        Provider provider = savedProvider("새로운 공급업체");
+
+        Product product1 = savedProduct("상품1",1000,1000);
+        Product product2 = savedProduct("상품2",500,1500);
+        Product product3 = savedProduct("상품3",750,500);
+
+        product1.setProvider(provider);
+        product2.setProvider(provider);
+        product3.setProvider(provider);
+
+        provider.getProductList().addAll(Lists.newArrayList(product1,product2,product3));
+
+        providerRepository.saveAndFlush(provider);
+
+        providerRepository.findAll().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
+
+        Provider foundProvider = providerRepository.findById(1L).get();
+        foundProvider.getProductList().remove(0);
+
+        providerRepository.findAll().forEach(System.out::println);
+        productRepository.findAll().forEach(System.out::println);
     }
 }
