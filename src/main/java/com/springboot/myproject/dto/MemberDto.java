@@ -2,14 +2,13 @@ package com.springboot.myproject.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@RequiredArgsConstructor
+@Setter @Getter
 @ToString
 public class MemberDto {
-    private final String name;
-    private final String email;
-    private final String organization;
-
+    private String name;
+    private String email;
+    private String organization;
 }
